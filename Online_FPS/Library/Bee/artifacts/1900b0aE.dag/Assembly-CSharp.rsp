@@ -357,6 +357,7 @@
 -analyzer:"D:/unity/2022.3.21f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.SourceGenerators.dll"
 "Assets/Scripts/Gun.cs"
 "Assets/Scripts/PlayerController.cs"
+"Assets/Scripts/SpawnManager.cs"
 "Assets/Scripts/UIController.cs"
 -langversion:9.0
 
