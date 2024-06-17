@@ -386,6 +386,7 @@
 "Assets/Scripts/Gun.cs"
 "Assets/Scripts/Launcher.cs"
 "Assets/Scripts/PlayerController.cs"
+"Assets/Scripts/RoomButtonScript.cs"
 "Assets/Scripts/SpawnManager.cs"
 "Assets/Scripts/UIController.cs"
 -langversion:9.0
