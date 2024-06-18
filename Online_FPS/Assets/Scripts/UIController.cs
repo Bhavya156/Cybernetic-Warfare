@@ -17,6 +17,11 @@ public class UIController : MonoBehaviour
     public GameObject DeathScreen;
     public TextMeshProUGUI deathText;
 
+    public TextMeshProUGUI kills, deaths;
+
+    public GameObject LeaderBoard;
+    public LeaderboardPlayer leaderboardPlayerDisplay;
+
     private void Awake() {
         instance = this;
     }

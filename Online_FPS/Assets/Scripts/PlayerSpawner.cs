@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Photon.Pun;
 using UnityEngine;
 
@@ -37,6 +38,9 @@ public class PlayerSpawner : MonoBehaviour
     public void Die(string damager)
     {
         UIController.instance.deathText.text = "You were killed by " + damager;
+
+        MatchManager.instance.UpdateStatsSend(PhotonNetwork.LocalPlayer.ActorNumber, 1, 1);
+        
         if (player != null)
         {
             StartCoroutine(DieCo());

@@ -1,10 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using ExitGames.Client.Photon;
 using Photon.Pun;
+using Photon.Realtime;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MatchManager : MonoBehaviour
+public class MatchManager : MonoBehaviourPunCallbacks, IOnEventCallback
 {
     public static MatchManager instance;
 
@@ -13,6 +17,16 @@ public class MatchManager : MonoBehaviour
         instance = this;
     }
 
+    public enum EventCodes : byte
+    {
+        NewPlayer,
+        ListPlayers,
+        UpdateStats,
+    }
+
+    public List<PlayerInfo> allPlayers = new();
+    private int index;
+    private List<LeaderboardPlayer> lboardPlayers = new();
 
     // Start is called before the first frame update
     void Start()
@@ -21,11 +35,266 @@ public class MatchManager : MonoBehaviour
         {
             SceneManager.LoadScene(0);
         }
+        else
+        {
+            NewPlayerSend(PhotonNetwork.NickName);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            if (UIController.instance.LeaderBoard.activeInHierarchy)
+            {
+                UIController.instance.LeaderBoard.SetActive(false);
+            }
+            else
+            {
+                ShowLeaderBoard();
+            }
+        }
+    }
 
+    public void OnEvent(EventData photonEvent)
+    {
+        if (photonEvent.Code < 200)
+        {
+            EventCodes theEvent = (EventCodes)photonEvent.Code;
+            object[] data = (object[])photonEvent.CustomData;
+
+            //Debug.Log("Receives event :" + theEvent);
+
+            switch (theEvent)
+            {
+                case EventCodes.NewPlayer:
+                    NewPlayerReceive(data);
+                    break;
+                case EventCodes.ListPlayers:
+                    ListPlayersReceive(data);
+                    break;
+                case EventCodes.UpdateStats:
+                    UpdateStatsReceive(data);
+                    break;
+            }
+        }
+    }
+
+    public override void OnEnable()
+    {
+        PhotonNetwork.AddCallbackTarget(this);
+    }
+
+    public override void OnDisable()
+    {
+        PhotonNetwork.RemoveCallbackTarget(this);
+    }
+
+    public void NewPlayerSend(string username)
+    {
+        object[] package = new object[4];
+        package[0] = username;
+        package[1] = PhotonNetwork.LocalPlayer.ActorNumber;
+        package[2] = 0;
+        package[3] = 0;
+
+        PhotonNetwork.RaiseEvent(
+            (byte)EventCodes.NewPlayer,
+            package,
+            new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient },
+            new SendOptions { Reliability = true }
+        );
+    }
+
+    public void NewPlayerReceive(object[] dataReceive)
+    {
+        PlayerInfo player = new PlayerInfo(
+            (string)dataReceive[0],
+            (int)dataReceive[1],
+            (int)dataReceive[2],
+            (int)dataReceive[3]
+        );
+        allPlayers.Add(player);
+
+        ListPlayersSend();
+    }
+
+    public void ListPlayersSend()
+    {
+        object[] package = new object[allPlayers.Count];
+
+        for (int i = 0; i < allPlayers.Count; i++)
+        {
+            object[] piece = new object[4];
+
+            piece[0] = allPlayers[i].name;
+            piece[1] = allPlayers[i].actor;
+            piece[2] = allPlayers[i].kills;
+            piece[3] = allPlayers[i].deaths;
+
+            package[i] = piece;
+        }
+
+        PhotonNetwork.RaiseEvent(
+            (byte)EventCodes.ListPlayers,
+            package,
+            new RaiseEventOptions { Receivers = ReceiverGroup.All },
+            new SendOptions { Reliability = true }
+        );
+    }
+
+    public void ListPlayersReceive(object[] dataReceive)
+    {
+        allPlayers.Clear();
+
+        for (int i = 0; i < dataReceive.Length; i++)
+        {
+            object[] piece = (object[])dataReceive[i];
+
+            PlayerInfo player = new PlayerInfo(
+                (string)piece[0],
+                (int)piece[1],
+                (int)piece[2],
+                (int)piece[3]
+            );
+            allPlayers.Add(player);
+
+            if (PhotonNetwork.LocalPlayer.ActorNumber == player.actor)
+            {
+                index = i;
+            }
+        }
+    }
+
+    public void UpdateStatsSend(int actorSending, int statToUpdate, int amountToChange)
+    {
+        object[] package = new object[] { actorSending, statToUpdate, amountToChange };
+
+        PhotonNetwork.RaiseEvent(
+            (byte)EventCodes.UpdateStats,
+            package,
+            new RaiseEventOptions { Receivers = ReceiverGroup.All },
+            new SendOptions { Reliability = true }
+        );
+    }
+
+    public void UpdateStatsReceive(object[] dataReceive)
+    {
+        int actor = (int)dataReceive[0];
+        int statType = (int)dataReceive[1];
+        int amount = (int)dataReceive[2];
+
+        for (int i = 0; i < allPlayers.Count; i++)
+        {
+            if (allPlayers[i].actor == actor)
+            {
+                switch (statType)
+                {
+                    case 0: //kills
+                        allPlayers[i].kills += amount;
+                        Debug.Log("Player " + allPlayers[i].name + " : kills " + allPlayers[i].kills);
+                        break;
+
+                    case 1:
+                        allPlayers[i].deaths += amount;
+                        Debug.Log("Player " + allPlayers[i].name + " : deaths " + allPlayers[i].deaths);
+                        break;
+                }
+
+                if (i == index)
+                {
+                    UpdateStatsDisplay();
+                }
+
+                if (UIController.instance.LeaderBoard.activeInHierarchy)
+                {
+                    ShowLeaderBoard();
+                }
+
+                break;
+            }
+        }
+    }
+
+    public void UpdateStatsDisplay()
+    {
+        if (allPlayers.Count > index)
+        {
+            UIController.instance.kills.text = "Kills : " + allPlayers[index].kills;
+            UIController.instance.deaths.text = "Deaths : " + allPlayers[index].deaths;
+        }
+        else
+        {
+            UIController.instance.kills.text = "Kills : 0";
+            UIController.instance.deaths.text = "Deaths : 0";
+        }
+    }
+
+    void ShowLeaderBoard()
+    {
+        UIController.instance.LeaderBoard.SetActive(true);
+
+        foreach (LeaderboardPlayer lp in lboardPlayers)
+        {
+            Destroy(lp.gameObject);
+        }
+        lboardPlayers.Clear();
+
+        UIController.instance.leaderboardPlayerDisplay.gameObject.SetActive(false);
+
+        List<PlayerInfo> sorted = SortPlayers(allPlayers);
+
+        foreach (PlayerInfo player in sorted)
+        {
+            LeaderboardPlayer newPlayerDisplay = Instantiate(UIController.instance.leaderboardPlayerDisplay, UIController.instance.leaderboardPlayerDisplay.transform.parent);
+
+            newPlayerDisplay.SetDetails(player.name, player.kills, player.deaths);
+
+            newPlayerDisplay.gameObject.SetActive(true);
+
+            lboardPlayers.Add(newPlayerDisplay);
+        }
+    }
+
+    private List<PlayerInfo> SortPlayers(List<PlayerInfo> players)
+    {
+        List<PlayerInfo> sorted = new();
+
+        while (sorted.Count < players.Count)
+        {
+            int highest = -1;
+            PlayerInfo selectedPlayer = players[0];
+
+            foreach (PlayerInfo player in players)
+            {
+                if (!sorted.Contains(player))
+                {
+                    if (player.kills > highest)
+                    {
+                        selectedPlayer = player;
+                        highest = player.kills;
+                    }
+                }
+            }
+            sorted.Add(selectedPlayer);
+        }
+
+        return sorted;
+    }
+}
+
+[Serializable]
+public class PlayerInfo
+{
+    public string name;
+    public int actor, kills, deaths;
+
+    public PlayerInfo(string _name, int _actor, int _kills, int _deaths)
+    {
+        name = _name;
+        actor = _actor;
+        kills = _kills;
+        deaths = _deaths;
     }
 }

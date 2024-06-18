@@ -8,6 +8,7 @@ ScriptsOnlyBuild:
     - DestroyOverTime
     - Gun
     - Launcher
+    - LeaderboardPlayer
     - MatchManager
     - PlayerController
     - PlayerSpawner
@@ -30,9 +31,8 @@ ScriptsOnlyBuild:
     - Photon.Pun.Demo.PunBasics.PlayerUI
     - Photon.Pun.Demo.SlotRacer.PlayerControl
     - Photon.Pun.Demo.SlotRacer.Utils.SplineWalker
-    PhotonUnityNetworking.Editor.dll:
-    - Photon.Pun.PunSceneSettings
     PhotonUnityNetworking.dll:
+    - Photon.Pun.PhotonAnimatorView
     - Photon.Pun.PhotonTransformView
     - Photon.Pun.PhotonView
     - Photon.Pun.ServerSettings
@@ -50,6 +50,14 @@ ScriptsOnlyBuild:
     - TMPro.TMP_SpriteAsset
     - TMPro.TMP_StyleSheet
     - TMPro.TextMeshProUGUI
+    UnityEditor.Graphs.dll:
+    - UnityEditor.Graphs.AnimationBlendTree.Graph
+    - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
+    - UnityEditor.Graphs.AnimationStateMachine.Graph
+    - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.StateNode
+    - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
     - UnityEditor.TestTools.TestRunner.TestListCacheData
@@ -125,25 +133,22 @@ ScriptsOnlyBuild:
   methodsToPreserve:
   - assembly: Assembly-CSharp
     fullTypeName: Launcher
+    methodName: StartGame
+  - assembly: Assembly-CSharp
+    fullTypeName: Launcher
     methodName: QuitGame
   - assembly: Assembly-CSharp
     fullTypeName: Launcher
-    methodName: CloseRoomBrowser
-  - assembly: Assembly-CSharp
-    fullTypeName: Launcher
-    methodName: QuickJoin
+    methodName: LeaveRoom
   - assembly: Assembly-CSharp
     fullTypeName: Launcher
     methodName: SetNickName
   - assembly: Assembly-CSharp
     fullTypeName: Launcher
-    methodName: OpenRoomCreate
-  - assembly: Assembly-CSharp
-    fullTypeName: Launcher
-    methodName: OpenRoomBrowser
-  - assembly: Assembly-CSharp
-    fullTypeName: Launcher
     methodName: CreateRoom
+  - assembly: Assembly-CSharp
+    fullTypeName: Launcher
+    methodName: OpenRoomCreate
   - assembly: Assembly-CSharp
     fullTypeName: RoomButtonScript
     methodName: OpenRoom
@@ -152,10 +157,13 @@ ScriptsOnlyBuild:
     methodName: CloseErrorScreen
   - assembly: Assembly-CSharp
     fullTypeName: Launcher
-    methodName: LeaveRoom
+    methodName: OpenRoomBrowser
   - assembly: Assembly-CSharp
     fullTypeName: Launcher
-    methodName: StartGame
+    methodName: CloseRoomBrowser
+  - assembly: Assembly-CSharp
+    fullTypeName: Launcher
+    methodName: QuickJoin
   sceneClasses:
     Assets/Scenes/MainMenu.unity:
     - Class: 1
@@ -333,9 +341,17 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 64
       Script: {instanceID: 0}
+    - Class: 65
+      Script: {instanceID: 0}
+    - Class: 74
+      Script: {instanceID: 0}
     - Class: 81
       Script: {instanceID: 0}
     - Class: 89
+      Script: {instanceID: 0}
+    - Class: 91
+      Script: {instanceID: 0}
+    - Class: 95
       Script: {instanceID: 0}
     - Class: 104
       Script: {instanceID: 0}
@@ -368,18 +384,26 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 21396}
     - Class: 114
+      Script: {instanceID: 21404}
+    - Class: 114
       Script: {instanceID: 21420}
     - Class: 114
       Script: {instanceID: 21742}
+    - Class: 114
+      Script: {instanceID: 21828}
     - Class: 114
       Script: {instanceID: 22678}
     - Class: 114
       Script: {instanceID: 22866}
     - Class: 114
       Script: {instanceID: 22984}
+    - Class: 114
+      Script: {instanceID: 60904}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
+      Script: {instanceID: 0}
+    - Class: 137
       Script: {instanceID: 0}
     - Class: 143
       Script: {instanceID: 0}
@@ -448,7 +472,7 @@ ScriptsOnlyBuild:
     className: Image
   - hash:
       serializedVersion: 2
-      Hash: 773b44631713ccff9fefee99f1ad9f80
+      Hash: 0c95771368417b6fcf967139269ab716
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: MatchManager
@@ -970,7 +994,7 @@ ScriptsOnlyBuild:
     className: UnityOnCollisionExit2DMessageListener
   - hash:
       serializedVersion: 2
-      Hash: 07e1fe003550548805737c2e0f50421d
+      Hash: 2080544bbd73a9e54a7717e26b59fc6a
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: PlayerController
@@ -1972,7 +1996,7 @@ ScriptsOnlyBuild:
     className: ConnectionHandler
   - hash:
       serializedVersion: 2
-      Hash: 013e05ee7ccf011dc653fe5d71e51587
+      Hash: 1c23f9c7616f28b4723d47b9b033195b
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: UIController
@@ -2162,6 +2186,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.VisualScripting.Core
     namespaceName: Unity.VisualScripting
     className: UnityOnSliderValueChangedMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 8c69e097a15e02e55628c7cd3940470f
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: LeaderboardPlayer
   platform: 19
   scenePathNames:
   - Assets/Scenes/MainMenu.unity
