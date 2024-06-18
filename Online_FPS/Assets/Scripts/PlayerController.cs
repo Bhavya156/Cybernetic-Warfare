@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using ExitGames.Client.Photon.StructWrapping;
 using Photon.Pun;
 using UnityEngine;
 
@@ -49,6 +51,13 @@ public class PlayerController : MonoBehaviourPunCallbacks
     public Transform modelGunPoint;
     public Transform gunHolder;
 
+    public Material[] allSkins;
+    public float adsSpeed = 5f;
+
+    public Transform adsOutPoint, adsInPoint;
+
+    public AudioSource footStepSlow, footStopFast;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -75,6 +84,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
             gunHolder.localPosition = Vector3.zero;
             gunHolder.localRotation = Quaternion.identity;
         }
+
+        playerModel.GetComponent<Renderer>().material = allSkins[photonView.Owner.ActorNumber % allSkins.Length];
     }
 
     // Update is called once per frame
@@ -104,10 +115,23 @@ public class PlayerController : MonoBehaviourPunCallbacks
             if (Input.GetKey(KeyCode.LeftShift))
             {
                 activeMoveSpeed = runSpeed;
+                if (!footStopFast.isPlaying && moveDir != Vector3.zero) {
+                    footStopFast.Play();
+                    footStepSlow.Stop();
+                }
             }
             else
             {
                 activeMoveSpeed = moveSpeed;
+                if (!footStepSlow.isPlaying && moveDir != Vector3.zero) {
+                    footStopFast.Stop();
+                    footStepSlow.Play();
+                }
+            }
+
+            if (moveDir == Vector3.zero || !isGrounded) {
+                footStepSlow.Stop();
+                footStopFast.Stop();
             }
 
             float yVel = movement.y;
@@ -215,6 +239,16 @@ public class PlayerController : MonoBehaviourPunCallbacks
             anim.SetBool("grounded", isGrounded);
             anim.SetFloat("speed", moveDir.magnitude);
 
+            //ADS Setting
+
+            if (Input.GetMouseButton(1)) {
+                cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, allGuns[selectedGun].adsZoom, adsSpeed * Time.deltaTime);
+                gunHolder.position = Vector3.Lerp(gunHolder.position, adsInPoint.position, adsSpeed * Time.deltaTime);
+            } else {
+                cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, 60f, adsSpeed * Time.deltaTime);
+                gunHolder.position = Vector3.Lerp(gunHolder.position, adsOutPoint.position, adsSpeed * Time.deltaTime);
+            }
+
             // Cursor Locking
             if (Input.GetKeyDown(KeyCode.Escape))
             {
@@ -222,7 +256,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             }
             else if (Cursor.lockState == CursorLockMode.None)
             {
-                if (Input.GetMouseButtonDown(0))
+                if (Input.GetMouseButtonDown(0) && !UIController.instance.optionsScreen.activeInHierarchy)
                 {
                     Cursor.lockState = CursorLockMode.Locked;
                 }
@@ -265,6 +299,9 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
         allGuns[selectedGun].muzzleFlash.SetActive(true);
         muzzleCounter = muzzleDisplayTime;
+
+        allGuns[selectedGun].shotSound.Stop();
+        allGuns[selectedGun].shotSound.Play();
     }
 
     [PunRPC]

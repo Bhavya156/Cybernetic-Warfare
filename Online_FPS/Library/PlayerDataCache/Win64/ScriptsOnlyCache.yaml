@@ -31,8 +31,6 @@ ScriptsOnlyBuild:
     - Photon.Pun.Demo.PunBasics.PlayerUI
     - Photon.Pun.Demo.SlotRacer.PlayerControl
     - Photon.Pun.Demo.SlotRacer.Utils.SplineWalker
-    PhotonUnityNetworking.Editor.dll:
-    - Photon.Pun.PunSceneSettings
     PhotonUnityNetworking.dll:
     - Photon.Pun.PhotonAnimatorView
     - Photon.Pun.PhotonTransformView
@@ -138,10 +136,28 @@ ScriptsOnlyBuild:
     methodName: OpenRoomCreate
   - assembly: Assembly-CSharp
     fullTypeName: Launcher
-    methodName: QuickJoin
+    methodName: QuitGame
+  - assembly: Assembly-CSharp
+    fullTypeName: Launcher
+    methodName: CloseRoomBrowser
   - assembly: Assembly-CSharp
     fullTypeName: Launcher
     methodName: OpenRoomBrowser
+  - assembly: Assembly-CSharp
+    fullTypeName: Launcher
+    methodName: CloseErrorScreen
+  - assembly: Assembly-CSharp
+    fullTypeName: Launcher
+    methodName: SetNickName
+  - assembly: Assembly-CSharp
+    fullTypeName: RoomButtonScript
+    methodName: OpenRoom
+  - assembly: Assembly-CSharp
+    fullTypeName: Launcher
+    methodName: QuickJoin
+  - assembly: Assembly-CSharp
+    fullTypeName: Launcher
+    methodName: LeaveRoom
   - assembly: Assembly-CSharp
     fullTypeName: Launcher
     methodName: CreateRoom
@@ -149,23 +165,29 @@ ScriptsOnlyBuild:
     fullTypeName: Launcher
     methodName: StartGame
   - assembly: Assembly-CSharp
-    fullTypeName: Launcher
-    methodName: CloseErrorScreen
-  - assembly: Assembly-CSharp
-    fullTypeName: RoomButtonScript
-    methodName: OpenRoom
-  - assembly: Assembly-CSharp
-    fullTypeName: Launcher
-    methodName: LeaveRoom
-  - assembly: Assembly-CSharp
-    fullTypeName: Launcher
-    methodName: SetNickName
-  - assembly: Assembly-CSharp
-    fullTypeName: Launcher
-    methodName: CloseRoomBrowser
-  - assembly: Assembly-CSharp
-    fullTypeName: Launcher
+    fullTypeName: UIController
     methodName: QuitGame
+  - assembly: Assembly-CSharp
+    fullTypeName: UIController
+    methodName: ReturnToMainMenu
+  - assembly: Assembly-CSharp
+    fullTypeName: UIController
+    methodName: ShowHideOptions
+  - assembly: Assembly-CSharp
+    fullTypeName: UIController
+    methodName: ReturnToMainMenu
+  - assembly: Assembly-CSharp
+    fullTypeName: UIController
+    methodName: QuitGame
+  - assembly: Assembly-CSharp
+    fullTypeName: UIController
+    methodName: ReturnToMainMenu
+  - assembly: Assembly-CSharp
+    fullTypeName: UIController
+    methodName: ShowHideOptions
+  - assembly: Assembly-CSharp
+    fullTypeName: UIController
+    methodName: ReturnToMainMenu
   sceneClasses:
     Assets/Scenes/MainMenu.unity:
     - Class: 1
@@ -195,6 +217,10 @@ ScriptsOnlyBuild:
     - Class: 74
       Script: {instanceID: 0}
     - Class: 81
+      Script: {instanceID: 0}
+    - Class: 82
+      Script: {instanceID: 0}
+    - Class: 83
       Script: {instanceID: 0}
     - Class: 89
       Script: {instanceID: 0}
@@ -322,6 +348,16 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 225
       Script: {instanceID: 0}
+    - Class: 241
+      Script: {instanceID: 0}
+    - Class: 243
+      Script: {instanceID: 0}
+    - Class: 245
+      Script: {instanceID: 0}
+    - Class: 258
+      Script: {instanceID: 0}
+    - Class: 850595691
+      Script: {instanceID: 0}
     Assets/Scenes/Map 1.unity:
     - Class: 1
       Script: {instanceID: 0}
@@ -349,6 +385,10 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 81
       Script: {instanceID: 0}
+    - Class: 82
+      Script: {instanceID: 0}
+    - Class: 83
+      Script: {instanceID: 0}
     - Class: 89
       Script: {instanceID: 0}
     - Class: 91
@@ -359,6 +399,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 108
       Script: {instanceID: 0}
+    - Class: 114
+      Script: {instanceID: 16648}
     - Class: 114
       Script: {instanceID: 16700}
     - Class: 114
@@ -424,6 +466,12 @@ ScriptsOnlyBuild:
     - Class: 223
       Script: {instanceID: 0}
     - Class: 224
+      Script: {instanceID: 0}
+    - Class: 241
+      Script: {instanceID: 0}
+    - Class: 243
+      Script: {instanceID: 0}
+    - Class: 245
       Script: {instanceID: 0}
     - Class: 258
       Script: {instanceID: 0}
@@ -456,6 +504,10 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 81
       Script: {instanceID: 0}
+    - Class: 82
+      Script: {instanceID: 0}
+    - Class: 83
+      Script: {instanceID: 0}
     - Class: 89
       Script: {instanceID: 0}
     - Class: 91
@@ -466,6 +518,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 108
       Script: {instanceID: 0}
+    - Class: 114
+      Script: {instanceID: 16648}
     - Class: 114
       Script: {instanceID: 16700}
     - Class: 114
@@ -531,6 +585,12 @@ ScriptsOnlyBuild:
     - Class: 223
       Script: {instanceID: 0}
     - Class: 224
+      Script: {instanceID: 0}
+    - Class: 241
+      Script: {instanceID: 0}
+    - Class: 243
+      Script: {instanceID: 0}
+    - Class: 245
       Script: {instanceID: 0}
     - Class: 258
       Script: {instanceID: 0}
@@ -1103,7 +1163,7 @@ ScriptsOnlyBuild:
     className: UnityOnCollisionExit2DMessageListener
   - hash:
       serializedVersion: 2
-      Hash: 2080544bbd73a9e54a7717e26b59fc6a
+      Hash: 97ac56b5b342ba11a5ec0f997752aa8e
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: PlayerController
@@ -1751,7 +1811,7 @@ ScriptsOnlyBuild:
     className: TMP_SubMesh
   - hash:
       serializedVersion: 2
-      Hash: 0d30b3830f4a4eb2f8c8b4e9ee0a74a4
+      Hash: 57962e3de866c4352744a24e701c0aa5
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: Gun
@@ -2105,7 +2165,7 @@ ScriptsOnlyBuild:
     className: ConnectionHandler
   - hash:
       serializedVersion: 2
-      Hash: 34e4703e9d9b3bcfb809143c47cbdb72
+      Hash: 1adb12a971798b460f1da1cb6edb775f
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: UIController
@@ -2306,5 +2366,5 @@ ScriptsOnlyBuild:
   - Assets/Scenes/MainMenu.unity
   - Assets/Scenes/Map 1.unity
   - Assets/Scenes/Map 2.unity
-  playerPath: D:/UnityProject/Bhavya_Gitlab/Online_FPS/Online_FPS/Builds/Valorant
+  playerPath: D:/UnityProject/Bhavya_Gitlab/Online_FPS/Online_FPS/Build_Final/Valorant
     Super Lite.exe
