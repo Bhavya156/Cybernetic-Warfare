@@ -31,6 +31,8 @@ ScriptsOnlyBuild:
     - Photon.Pun.Demo.PunBasics.PlayerUI
     - Photon.Pun.Demo.SlotRacer.PlayerControl
     - Photon.Pun.Demo.SlotRacer.Utils.SplineWalker
+    PhotonUnityNetworking.Editor.dll:
+    - Photon.Pun.PunSceneSettings
     PhotonUnityNetworking.dll:
     - Photon.Pun.PhotonAnimatorView
     - Photon.Pun.PhotonTransformView
@@ -133,10 +135,25 @@ ScriptsOnlyBuild:
   methodsToPreserve:
   - assembly: Assembly-CSharp
     fullTypeName: Launcher
+    methodName: OpenRoomCreate
+  - assembly: Assembly-CSharp
+    fullTypeName: Launcher
+    methodName: QuickJoin
+  - assembly: Assembly-CSharp
+    fullTypeName: Launcher
+    methodName: OpenRoomBrowser
+  - assembly: Assembly-CSharp
+    fullTypeName: Launcher
+    methodName: CreateRoom
+  - assembly: Assembly-CSharp
+    fullTypeName: Launcher
     methodName: StartGame
   - assembly: Assembly-CSharp
     fullTypeName: Launcher
-    methodName: QuitGame
+    methodName: CloseErrorScreen
+  - assembly: Assembly-CSharp
+    fullTypeName: RoomButtonScript
+    methodName: OpenRoom
   - assembly: Assembly-CSharp
     fullTypeName: Launcher
     methodName: LeaveRoom
@@ -145,25 +162,10 @@ ScriptsOnlyBuild:
     methodName: SetNickName
   - assembly: Assembly-CSharp
     fullTypeName: Launcher
-    methodName: CreateRoom
-  - assembly: Assembly-CSharp
-    fullTypeName: Launcher
-    methodName: OpenRoomCreate
-  - assembly: Assembly-CSharp
-    fullTypeName: RoomButtonScript
-    methodName: OpenRoom
-  - assembly: Assembly-CSharp
-    fullTypeName: Launcher
-    methodName: CloseErrorScreen
-  - assembly: Assembly-CSharp
-    fullTypeName: Launcher
-    methodName: OpenRoomBrowser
-  - assembly: Assembly-CSharp
-    fullTypeName: Launcher
     methodName: CloseRoomBrowser
   - assembly: Assembly-CSharp
     fullTypeName: Launcher
-    methodName: QuickJoin
+    methodName: QuitGame
   sceneClasses:
     Assets/Scenes/MainMenu.unity:
     - Class: 1
@@ -427,6 +429,113 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 850595691
       Script: {instanceID: 0}
+    Assets/Scenes/Map 2.unity:
+    - Class: 1
+      Script: {instanceID: 0}
+    - Class: 4
+      Script: {instanceID: 0}
+    - Class: 20
+      Script: {instanceID: 0}
+    - Class: 21
+      Script: {instanceID: 0}
+    - Class: 23
+      Script: {instanceID: 0}
+    - Class: 28
+      Script: {instanceID: 0}
+    - Class: 33
+      Script: {instanceID: 0}
+    - Class: 43
+      Script: {instanceID: 0}
+    - Class: 48
+      Script: {instanceID: 0}
+    - Class: 64
+      Script: {instanceID: 0}
+    - Class: 65
+      Script: {instanceID: 0}
+    - Class: 74
+      Script: {instanceID: 0}
+    - Class: 81
+      Script: {instanceID: 0}
+    - Class: 89
+      Script: {instanceID: 0}
+    - Class: 91
+      Script: {instanceID: 0}
+    - Class: 95
+      Script: {instanceID: 0}
+    - Class: 104
+      Script: {instanceID: 0}
+    - Class: 108
+      Script: {instanceID: 0}
+    - Class: 114
+      Script: {instanceID: 16700}
+    - Class: 114
+      Script: {instanceID: 16728}
+    - Class: 114
+      Script: {instanceID: 17766}
+    - Class: 114
+      Script: {instanceID: 17978}
+    - Class: 114
+      Script: {instanceID: 18196}
+    - Class: 114
+      Script: {instanceID: 18362}
+    - Class: 114
+      Script: {instanceID: 18776}
+    - Class: 114
+      Script: {instanceID: 20266}
+    - Class: 114
+      Script: {instanceID: 20338}
+    - Class: 114
+      Script: {instanceID: 20918}
+    - Class: 114
+      Script: {instanceID: 21024}
+    - Class: 114
+      Script: {instanceID: 21072}
+    - Class: 114
+      Script: {instanceID: 21396}
+    - Class: 114
+      Script: {instanceID: 21404}
+    - Class: 114
+      Script: {instanceID: 21420}
+    - Class: 114
+      Script: {instanceID: 21742}
+    - Class: 114
+      Script: {instanceID: 21828}
+    - Class: 114
+      Script: {instanceID: 22678}
+    - Class: 114
+      Script: {instanceID: 22866}
+    - Class: 114
+      Script: {instanceID: 22984}
+    - Class: 114
+      Script: {instanceID: 60904}
+    - Class: 115
+      Script: {instanceID: 0}
+    - Class: 128
+      Script: {instanceID: 0}
+    - Class: 137
+      Script: {instanceID: 0}
+    - Class: 143
+      Script: {instanceID: 0}
+    - Class: 157
+      Script: {instanceID: 0}
+    - Class: 196
+      Script: {instanceID: 0}
+    - Class: 198
+      Script: {instanceID: 0}
+    - Class: 199
+      Script: {instanceID: 0}
+    - Class: 213
+      Script: {instanceID: 0}
+    - Class: 222
+      Script: {instanceID: 0}
+    - Class: 223
+      Script: {instanceID: 0}
+    - Class: 224
+      Script: {instanceID: 0}
+    - Class: 258
+      Script: {instanceID: 0}
+    - Class: 850595691
+      Script: {instanceID: 0}
   scriptHashData:
   - hash:
       serializedVersion: 2
@@ -472,7 +581,7 @@ ScriptsOnlyBuild:
     className: Image
   - hash:
       serializedVersion: 2
-      Hash: 0c95771368417b6fcf967139269ab716
+      Hash: 48fa34ac09d82f0a3a65a4c311f21e46
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: MatchManager
@@ -1258,7 +1367,7 @@ ScriptsOnlyBuild:
     className: ThirdPersonUserControl
   - hash:
       serializedVersion: 2
-      Hash: 36d0ad842e9ce0055c3b7203f847bc41
+      Hash: 23e4a5db29603aef57bea96ce2311a73
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: Launcher
@@ -1996,7 +2105,7 @@ ScriptsOnlyBuild:
     className: ConnectionHandler
   - hash:
       serializedVersion: 2
-      Hash: 1c23f9c7616f28b4723d47b9b033195b
+      Hash: 34e4703e9d9b3bcfb809143c47cbdb72
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: UIController
@@ -2196,5 +2305,6 @@ ScriptsOnlyBuild:
   scenePathNames:
   - Assets/Scenes/MainMenu.unity
   - Assets/Scenes/Map 1.unity
+  - Assets/Scenes/Map 2.unity
   playerPath: D:/UnityProject/Bhavya_Gitlab/Online_FPS/Online_FPS/Builds/Valorant
     Super Lite.exe

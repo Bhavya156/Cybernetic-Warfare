@@ -68,7 +68,9 @@ public class PlayerController : MonoBehaviourPunCallbacks
             playerModel.SetActive(false);
             UIController.instance.HealthSlider.maxValue = maxHealth;
             UIController.instance.HealthSlider.value = currentHealth;
-        } else {
+        }
+        else
+        {
             gunHolder.parent = modelGunPoint;
             gunHolder.localPosition = Vector3.zero;
             gunHolder.localRotation = Quaternion.identity;
@@ -299,8 +301,10 @@ public class PlayerController : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    public void SetGun(int gunToSwitchTo) {
-        if (gunToSwitchTo < allGuns.Length) {
+    public void SetGun(int gunToSwitchTo)
+    {
+        if (gunToSwitchTo < allGuns.Length)
+        {
             selectedGun = gunToSwitchTo;
             SwitchGun();
         }
@@ -310,8 +314,16 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         if (photonView.IsMine)
         {
-            cam.transform.position = viewPoint.position;
-            cam.transform.rotation = viewPoint.rotation;
+            if (MatchManager.instance.state == MatchManager.GameState.Playing)
+            {
+                cam.transform.position = viewPoint.position;
+                cam.transform.rotation = viewPoint.rotation;
+            }
+            else
+            {
+                cam.transform.position = MatchManager.instance.mapCamPoint.position;
+                cam.transform.rotation = MatchManager.instance.mapCamPoint.rotation;
+            }
         }
     }
 }

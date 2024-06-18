@@ -21,6 +21,9 @@ public class UIController : MonoBehaviour
 
     public GameObject LeaderBoard;
     public LeaderboardPlayer leaderboardPlayerDisplay;
+    public GameObject endScreen;
+
+    public TextMeshProUGUI timerText;
 
     private void Awake() {
         instance = this;
